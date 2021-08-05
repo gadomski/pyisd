@@ -12,7 +12,11 @@ class Record:
 
     usaf_id: str
     ncei_id: str
-    datetime: datetime.datetime
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
     data_source: str
     latitude: float
     longitude: float
@@ -40,7 +44,6 @@ class Record:
     sea_level_pressure: float
     sea_level_pressure_quality_code: str
     additional_data: str
-    remarks: str
 
     @classmethod
     def parse(cls, line: str) -> "Record":
@@ -49,14 +52,11 @@ class Record:
             raise ValueError(f"Invalid ISD line (too short): {line}")
         usaf_id = line[4:10]
         ncei_id = line[10:15]
-        dt = datetime.datetime(
-            int(line[15:19]),
-            int(line[19:21]),
-            int(line[21:23]),
-            int(line[23:25]),
-            int(line[25:27]),
-            tzinfo=datetime.timezone.utc,
-        )
+        year = int(line[15:19])
+        month = int(line[19:21])
+        day = int(line[21:23])
+        hour = int(line[23:25])
+        minute = int(line[25:27])
         data_source = line[27]
         latitude = float(line[28:34]) / 1000
         longitude = float(line[34:41]) / 1000
@@ -83,14 +83,16 @@ class Record:
         dew_point_temperature_quality_code = line[98]
         sea_level_pressure = float(line[99:104]) / 10
         sea_level_pressure_quality_code = line[104]
-        tail = line[105:]
-        additional_data, tail = extract_data(tail, "ADD", ["REM", "EQD", "QNN"])
-        remarks, _ = extract_data(tail, "REM", ["EQD", "QNN"])
+        additional_data = line[105:]
 
         return cls(
             usaf_id=usaf_id,
             ncei_id=ncei_id,
-            datetime=dt,
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
             data_source=data_source,
             latitude=latitude,
             longitude=longitude,
@@ -118,7 +120,6 @@ class Record:
             sea_level_pressure=sea_level_pressure,
             sea_level_pressure_quality_code=sea_level_pressure_quality_code,
             additional_data=additional_data,
-            remarks=remarks,
         )
 
     def sky_condition_code(self) -> Optional[int]:
@@ -173,7 +174,6 @@ class RecordLite:
     def parse(cls, line: str) -> "RecordLite":
         """Parses a RecordLite from an ISD line."""
         record = Record.parse(line)
-        print(record.additional_data)
         if record.wind_direction == 999:
             if record.wind_observation_type == "C" or (
                 record.wind_observation_type == "9" and record.wind_speed == 0
@@ -186,11 +186,11 @@ class RecordLite:
         return RecordLite(
             usaf_id=record.usaf_id,
             ncei_id=record.ncei_id,
-            year=record.datetime.year,
-            month=record.datetime.month,
-            day=record.datetime.day,
-            hour=record.datetime.hour,
-            minute=record.datetime.minute,
+            year=record.year,
+            month=record.month,
+            day=record.day,
+            hour=record.hour,
+            minute=record.minute,
             latitude=check_for_missing(record.latitude, 99.999),
             longitude=check_for_missing(record.longitude, 999.999),
             elevation=check_for_missing(record.elevation, 9999),

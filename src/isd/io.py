@@ -23,9 +23,14 @@ def read_lite(path: str) -> List[RecordLite]:
 
 def read_to_geodataframe_lite(path: str) -> GeoDataFrame:
     """Reads an ISD file into a GeoDataFrame, using lite ISD records."""
-    records = read_lite(path)
-    data_frame = DataFrame(records)
+    data_frame = read_to_dataframe_lite(path)
     return GeoDataFrame(
         data_frame,
         geometry=geopandas.points_from_xy(data_frame.latitude, data_frame.longitude),
     )
+
+
+def read_to_dataframe_lite(path: str) -> DataFrame:
+    """Reads an ISD file into a DataFrame, using lite ISD records."""
+    records = read_lite(path)
+    return DataFrame(records)
