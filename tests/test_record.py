@@ -45,9 +45,11 @@ def test_record_lite(record_line: str) -> None:
     record = RecordLite.parse(record_line)
     assert record.usaf_id == "720538"
     assert record.ncei_id == "00164"
-    assert record.datetime == datetime.datetime(
-        2021, 1, 1, 0, 15, tzinfo=datetime.timezone.utc
-    )
+    assert record.year == 2021
+    assert record.month == 1
+    assert record.day == 1
+    assert record.hour == 0
+    assert record.minute == 15
     assert record.latitude == 40.167
     assert record.longitude == -105.167
     assert record.elevation == 1541

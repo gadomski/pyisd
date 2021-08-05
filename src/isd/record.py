@@ -147,7 +147,11 @@ class RecordLite:
 
     usaf_id: str
     ncei_id: str
-    datetime: datetime.datetime
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
     latitude: Optional[float]
     longitude: Optional[float]
     elevation: Optional[float]
@@ -176,7 +180,11 @@ class RecordLite:
         return RecordLite(
             usaf_id=record.usaf_id,
             ncei_id=record.ncei_id,
-            datetime=record.datetime,
+            year=record.datetime.year,
+            month=record.datetime.month,
+            day=record.datetime.day,
+            hour=record.datetime.hour,
+            minute=record.datetime.minute,
             latitude=check_for_missing(record.latitude, 99.999),
             longitude=check_for_missing(record.longitude, 999.999),
             elevation=check_for_missing(record.elevation, 9999),
