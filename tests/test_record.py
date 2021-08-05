@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from isd import Record
+from isd import Record, RecordLite
 
 
 def test_parse(record_line: str) -> None:
@@ -39,6 +39,26 @@ def test_parse(record_line: str) -> None:
     assert record.sea_level_pressure == 9999.9
     assert record.sea_level_pressure_quality_code == "9"
     assert record.additional_data
+
+
+def test_record_lite(record_line: str) -> None:
+    record = RecordLite.parse(record_line)
+    assert record.usaf_id == "720538"
+    assert record.ncei_id == "00164"
+    assert record.datetime == datetime.datetime(
+        2021, 1, 1, 0, 15, tzinfo=datetime.timezone.utc
+    )
+    assert record.latitude == 40.167
+    assert record.longitude == -105.167
+    assert record.elevation == 1541
+    assert record.air_temperature == 3.1
+    assert record.dew_point_temperature == -5.8
+    assert record.sea_level_pressure == None
+    assert record.wind_direction == 0
+    assert record.wind_speed == 0
+    assert record.sky_condition_code == None
+    assert record.liquid_precipitation_one_hour == None
+    assert record.liquid_precipitation_six_hours == None
 
 
 def test_line_too_short() -> None:

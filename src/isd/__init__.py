@@ -1,6 +1,6 @@
 from typing import List
 
-from isd.record import Record
+from isd.record import Record, RecordLite
 
 
 def read(path: str) -> List[Record]:
@@ -8,3 +8,6 @@ def read(path: str) -> List[Record]:
     with open(path) as f:
         records = [Record.parse(line) for line in f]
     return records
+
+
+__all__ = ["Record", "RecordLite"]
