@@ -1,6 +1,6 @@
 import datetime
 from dataclasses import dataclass
-from typing import Optional, TypeVar
+from typing import Optional, TypeVar, List, Tuple
 
 
 MIN_LINE_LENGTH = 105
@@ -40,6 +40,7 @@ class Record:
     sea_level_pressure: float
     sea_level_pressure_quality_code: str
     additional_data: str
+    remarks: str
 
     @classmethod
     def parse(cls, line: str) -> "Record":
@@ -82,7 +83,10 @@ class Record:
         dew_point_temperature_quality_code = line[98]
         sea_level_pressure = float(line[99:104]) / 10
         sea_level_pressure_quality_code = line[104]
-        additional_data = line[105:]
+        tail = line[105:]
+        additional_data, tail = extract_data(tail, "ADD", ["REM", "EQD", "QNN"])
+        remarks, _ = extract_data(tail, "REM", ["EQD", "QNN"])
+
         return cls(
             usaf_id=usaf_id,
             ncei_id=ncei_id,
@@ -114,6 +118,7 @@ class Record:
             sea_level_pressure=sea_level_pressure,
             sea_level_pressure_quality_code=sea_level_pressure_quality_code,
             additional_data=additional_data,
+            remarks=remarks,
         )
 
     def sky_condition_code(self) -> Optional[int]:
@@ -168,6 +173,7 @@ class RecordLite:
     def parse(cls, line: str) -> "RecordLite":
         """Parses a RecordLite from an ISD line."""
         record = Record.parse(line)
+        print(record.additional_data)
         if record.wind_direction == 999:
             if record.wind_observation_type == "C" or (
                 record.wind_observation_type == "9" and record.wind_speed == 0
@@ -209,3 +215,22 @@ def check_for_missing(value: Numeric, missing_value: Numeric) -> Optional[Numeri
         return None
     else:
         return value
+
+
+def extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
+    if message.startswith(tag):
+        index = None
+        for other_tag in later_tags:
+            try:
+                index = message.find(other_tag)
+            except ValueError:
+                continue
+            break
+        if index:
+            data = message[len(tag) : index]
+            tail = message[index:]
+            return data, tail
+        else:
+            return message[len(tag) :], ""
+    else:
+        return "", message

@@ -66,3 +66,8 @@ def test_record_lite(record_line: str) -> None:
 def test_line_too_short() -> None:
     with pytest.raises(ValueError):
         Record.parse("")
+
+
+def test_one_hour_precip(one_hour_precip_record_line: str) -> None:
+    record = RecordLite.parse(one_hour_precip_record_line)
+    assert record.liquid_precipitation_one_hour == 0.2
