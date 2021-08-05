@@ -2,6 +2,8 @@ import datetime
 from dataclasses import dataclass
 from typing import Optional, TypeVar, List, Tuple
 
+from isd.errors import IsdError
+
 
 MIN_LINE_LENGTH = 105
 
@@ -49,7 +51,7 @@ class Record:
     def parse(cls, line: str) -> "Record":
         """Parses an ISD line into a record."""
         if len(line) < MIN_LINE_LENGTH:
-            raise ValueError(f"Invalid ISD line (too short): {line}")
+            raise IsdError(f"Invalid ISD line (too short): {line}")
         usaf_id = line[4:10]
         ncei_id = line[10:15]
         year = int(line[15:19])

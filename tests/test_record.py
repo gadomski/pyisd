@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from isd import Record, RecordLite
+from isd import Record, RecordLite, IsdError
 
 
 def test_parse(record_line: str) -> None:
@@ -67,7 +67,7 @@ def test_record_lite(record_line: str) -> None:
 
 
 def test_line_too_short() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(IsdError):
         Record.parse("")
 
 
