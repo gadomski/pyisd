@@ -140,7 +140,11 @@ class Record:
                 index = self.additional_data.index(f"AA{n}")
             except ValueError:
                 continue
-            if int(self.additional_data[index + 3 : index + 5]) == hours:
+            try:
+                aa_hours = int(self.additional_data[index + 3 : index + 5])
+            except ValueError:
+                continue
+            if aa_hours == hours:
                 value = float(self.additional_data[index + 5 : index + 9]) / 10
                 return check_for_missing(float(value), 999.9)
         return None
