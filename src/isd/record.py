@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, TypeVar
+from typing import List, Optional, Tuple, TypeVar
 
 from isd.errors import IsdError
 
@@ -45,12 +45,16 @@ class Record:
     sea_level_pressure: float
     sea_level_pressure_quality_code: str
     additional_data: str
+    remarks: str
+    element_quality_data: str
+    original_observation_data: str
 
     @classmethod
     def parse(cls, line: str) -> "Record":
         """Parses an ISD line into a record."""
         if len(line) < MIN_LINE_LENGTH:
             raise IsdError(f"Invalid ISD line (too short): {line}")
+        line = line.strip()
         usaf_id = line[4:10]
         ncei_id = line[10:15]
         year = int(line[15:19])
@@ -84,7 +88,13 @@ class Record:
         dew_point_temperature_quality_code = line[98]
         sea_level_pressure = float(line[99:104]) / 10
         sea_level_pressure_quality_code = line[104]
-        additional_data = line[105:]
+        additional_data, remainder = extract_data(
+            line[105:], "ADD", ["REM", "EQD", "QNN"]
+        )
+        remarks, remainder = extract_data(remainder, "REM", ["EQD", "QNN"])
+        element_quality_data, remainder = extract_data(remainder, "EQD", ["QNN"])
+        original_observation_data, remainder = extract_data(remainder, "QNN", [])
+        assert not remainder
 
         return cls(
             usaf_id=usaf_id,
@@ -121,6 +131,9 @@ class Record:
             sea_level_pressure=sea_level_pressure,
             sea_level_pressure_quality_code=sea_level_pressure_quality_code,
             additional_data=additional_data,
+            remarks=remarks,
+            element_quality_data=element_quality_data,
+            original_observation_data=original_observation_data,
         )
 
     def sky_condition_code(self) -> Optional[int]:
@@ -154,3 +167,22 @@ def check_for_missing(value: Numeric, missing_value: Numeric) -> Optional[Numeri
         return None
     else:
         return value
+
+
+def extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
+    if message.startswith(tag):
+        index = None
+        for other_tag in later_tags:
+            try:
+                index = message.find(other_tag)
+            except ValueError:
+                continue
+            break
+        if index != -1:
+            data = message[len(tag) : index]
+            tail = message[index:]
+            return data, tail
+        else:
+            return message[len(tag) :], ""
+    else:
+        return "", message

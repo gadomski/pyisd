@@ -39,7 +39,14 @@ def test_parse(record_line: str) -> None:
     assert record.dew_point_temperature_quality_code == "1"
     assert record.sea_level_pressure == 9999.9
     assert record.sea_level_pressure_quality_code == "9"
-    assert record.additional_data
+    assert (
+        record.additional_data == "GD14991+0335399GE19MSL   +99999+"
+        "99999GF199999999999033531999999MA1101561999999"
+    )
+    assert (
+        record.remarks == "MET075METAR KLMO 010015Z AUTO 00000KT "
+        "10SM OVC110 03/M06 A2999 RMK AO2 T00311058="
+    )
 
 
 def test_line_too_short() -> None:
