@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, TypeVar
+from typing import Optional, TypeVar
 
 from isd.errors import IsdError
 
