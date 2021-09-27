@@ -1,4 +1,3 @@
-import datetime
 from dataclasses import dataclass
 from typing import Optional, TypeVar, List, Tuple
 
@@ -6,6 +5,7 @@ from isd.errors import IsdError
 
 
 MIN_LINE_LENGTH = 105
+Numeric = TypeVar("Numeric", int, float)
 
 
 @dataclass
@@ -150,93 +150,8 @@ class Record:
         return None
 
 
-@dataclass
-class RecordLite:
-    """A record structured to look like the ISD-lite data.
-
-    There's a bit more processing on these data to make optionals.
-    """
-
-    usaf_id: str
-    ncei_id: str
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    latitude: Optional[float]
-    longitude: Optional[float]
-    elevation: Optional[float]
-    air_temperature: Optional[float]
-    dew_point_temperature: Optional[float]
-    sea_level_pressure: Optional[float]
-    wind_direction: Optional[float]
-    wind_speed: Optional[float]
-    sky_condition_code: Optional[int]
-    liquid_precipitation_one_hour: Optional[float]
-    liquid_precipitation_six_hours: Optional[float]
-
-    @classmethod
-    def parse(cls, line: str) -> "RecordLite":
-        """Parses a RecordLite from an ISD line."""
-        record = Record.parse(line)
-        if record.wind_direction == 999:
-            if record.wind_observation_type == "C" or (
-                record.wind_observation_type == "9" and record.wind_speed == 0
-            ):
-                wind_direction: Optional[float] = 0
-            else:
-                wind_direction = None
-        else:
-            wind_direction = record.wind_direction
-        return RecordLite(
-            usaf_id=record.usaf_id,
-            ncei_id=record.ncei_id,
-            year=record.year,
-            month=record.month,
-            day=record.day,
-            hour=record.hour,
-            minute=record.minute,
-            latitude=check_for_missing(record.latitude, 99.999),
-            longitude=check_for_missing(record.longitude, 999.999),
-            elevation=check_for_missing(record.elevation, 9999),
-            air_temperature=check_for_missing(record.air_temperature, 999.9),
-            dew_point_temperature=check_for_missing(
-                record.dew_point_temperature, 999.9
-            ),
-            sea_level_pressure=check_for_missing(record.sea_level_pressure, 9999.9),
-            wind_direction=wind_direction,
-            wind_speed=check_for_missing(record.wind_speed, 999.9),
-            sky_condition_code=record.sky_condition_code(),
-            liquid_precipitation_one_hour=record.liquid_precipitation(1),
-            liquid_precipitation_six_hours=record.liquid_precipitation(6),
-        )
-
-
-Numeric = TypeVar("Numeric", int, float)
-
-
 def check_for_missing(value: Numeric, missing_value: Numeric) -> Optional[Numeric]:
     if value == missing_value:
         return None
     else:
         return value
-
-
-def extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
-    if message.startswith(tag):
-        index = None
-        for other_tag in later_tags:
-            try:
-                index = message.find(other_tag)
-            except ValueError:
-                continue
-            break
-        if index:
-            data = message[len(tag) : index]
-            tail = message[index:]
-            return data, tail
-        else:
-            return message[len(tag) :], ""
-    else:
-        return "", message

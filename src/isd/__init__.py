@@ -1,5 +1,5 @@
-from isd.record import Record, RecordLite
+from isd.record import Record
 from isd.errors import IsdError
 
 
-__all__ = ["Record", "RecordLite", "IsdError"]
+__all__ = ["Record", "IsdError"]
