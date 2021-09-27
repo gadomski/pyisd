@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional, TypeVar, List, Tuple
+from typing import List, Optional, Tuple, TypeVar
 
 from isd.errors import IsdError
-
 
 MIN_LINE_LENGTH = 105
 Numeric = TypeVar("Numeric", int, float)

@@ -1,9 +1,9 @@
+import os.path
 from contextlib import contextmanager
 from io import TextIOWrapper
-import os.path
 from typing import Generator, cast
-import pytest
 
+import pytest
 
 VANCE_BRAND_FILE_NAME = "720538-00164-2021"
 

@@ -1,6 +1,6 @@
 import pytest
 
-from isd import Record, IsdError
+from isd import IsdError, Record
 
 
 def test_parse(record_line: str) -> None:
