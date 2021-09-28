@@ -20,7 +20,8 @@ The Python API is pretty simple:
 from isd import Record
 records = []
 with open("isd-file") as file:
-    records.append(Record.parse(file))
+    for line in file:
+        records.append(Record.parse(line))
 ```
 
 There is currently no parsing of the `additional_data` section, but all mandatory fields are parsed out into appropriately-typed fields on a `Record`.
