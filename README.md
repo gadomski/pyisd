@@ -7,7 +7,7 @@ Reads NOAA [Integrated Surface Database (ISD)](https://www.ncei.noaa.gov/product
 ## Installation
 
 ```shell
-$ pip install pyisd
+$ pip install isd
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ There is no command line interface yet.
 The Python API is pretty simple:
 
 ```python
-from pyisd import Record
+from isd import Record
 records = []
 with open("isd-file") as file:
     records.append(Record.parse(file))
