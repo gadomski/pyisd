@@ -6,6 +6,7 @@ from typing import Generator, cast
 import pytest
 
 VANCE_BRAND_FILE_NAME = "720538-00164-2021"
+VANCE_BRAND_COMPRESSED_FILE_NAME = "720538-00164-2020.gz"
 
 
 def data_file_path(file_name: str) -> str:
@@ -23,3 +24,13 @@ def record_line() -> str:
     with open_data_file(VANCE_BRAND_FILE_NAME) as f:
         line = next(f)
     return line
+
+
+@pytest.fixture
+def uncompressed_path() -> str:
+    return data_file_path(VANCE_BRAND_FILE_NAME)
+
+
+@pytest.fixture
+def compressed_path() -> str:
+    return data_file_path(VANCE_BRAND_COMPRESSED_FILE_NAME)
