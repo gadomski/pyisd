@@ -5,3 +5,4 @@ mypy
 pandas-stubs
 pre-commit
 pytest
+sphinx
