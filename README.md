@@ -4,6 +4,7 @@ Reads NOAA [Integrated Surface Database (ISD)](https://www.ncei.noaa.gov/product
 
 [![CI](https://github.com/gadomski/pyisd/actions/workflows/ci.yaml/badge.svg)](https://github.com/gadomski/pyisd/actions/workflows/ci.yaml)
 ![PyPI](https://img.shields.io/pypi/v/isd)
+[![Documentation Status](https://readthedocs.org/projects/isd/badge/?version=latest)](https://isd.readthedocs.io/en/latest/?badge=latest)
 
 ## Installation
 
