@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, TypeVar
+from typing import List, Tuple
 
 from isd.errors import IsdError
 
 MIN_LINE_LENGTH = 105
-Numeric = TypeVar("Numeric", int, float)
 
 
 @dataclass
@@ -135,38 +134,6 @@ class Record:
             element_quality_data=element_quality_data,
             original_observation_data=original_observation_data,
         )
-
-    def sky_condition_code(self) -> Optional[int]:
-        """Returns the sky condition code from the additional data."""
-        try:
-            index = self.additional_data.index("GF1")
-        except ValueError:
-            return None
-        code = self.additional_data[index + 3 : index + 5]
-        return check_for_missing(int(code), 99)
-
-    def liquid_precipitation(self, hours: int) -> Optional[float]:
-        """Returns the liquid precipitation measurement over the last `hours` hours."""
-        for n in [1, 2, 3, 4]:
-            try:
-                index = self.additional_data.index(f"AA{n}")
-            except ValueError:
-                continue
-            try:
-                aa_hours = int(self.additional_data[index + 3 : index + 5])
-            except ValueError:
-                continue
-            if aa_hours == hours:
-                value = float(self.additional_data[index + 5 : index + 9]) / 10
-                return check_for_missing(float(value), 999.9)
-        return None
-
-
-def check_for_missing(value: Numeric, missing_value: Numeric) -> Optional[Numeric]:
-    if value == missing_value:
-        return None
-    else:
-        return value
 
 
 def extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
