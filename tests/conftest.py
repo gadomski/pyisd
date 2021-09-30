@@ -1,9 +1,11 @@
 import os.path
 from contextlib import contextmanager
 from io import TextIOWrapper
-from typing import Generator, cast
+from typing import Generator, List, cast
 
 import pytest
+
+from isd import Record
 
 VANCE_BRAND_FILE_NAME = "720538-00164-2021"
 VANCE_BRAND_COMPRESSED_FILE_NAME = "720538-00164-2020.gz"
@@ -34,3 +36,9 @@ def uncompressed_path() -> str:
 @pytest.fixture
 def compressed_path() -> str:
     return data_file_path(VANCE_BRAND_COMPRESSED_FILE_NAME)
+
+
+@pytest.fixture
+def records() -> List[Record]:
+    with open_data_file(VANCE_BRAND_FILE_NAME) as f:
+        return [Record.parse(line) for line in f]
