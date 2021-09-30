@@ -12,7 +12,8 @@ builtin_open = open
 def open(path: str) -> Generator[Iterable[Record], None, None]:
     """Opens a local ISD file and returns an iterator over its records.
 
-    If the path has a .gz compression, assumes that it is gzip compressed.
+    If the path has a .gz extension, this function will assume it has gzip
+    compression and will attempt to open it using `gzip.open`.
     """
     if os.path.splitext(path)[1] == ".gz":
         with gzip.open(path) as gzip_file:
