@@ -14,15 +14,19 @@ $ pip install isd
 
 ## Usage
 
-There is no command line interface yet.
-The Python API is pretty simple:
+There is a simple command line interface.
+The `isd record` command prints a single record in JSON format:
+
+```shell
+$ isd record 720538-00164-2021
+```
+
+The Python API allows reading compressed and uncompressed ISD files:
 
 ```python
-from isd import Record
-records = []
-with open("isd-file") as file:
-    for line in file:
-        records.append(Record.parse(line))
+import isd
+with isd.open("isd-file") as records_iterator:
+    records = list(records_iterator)
 ```
 
 There is currently no parsing of the `additional_data` section, but all mandatory fields are parsed out into appropriately-typed fields on a `Record`.
