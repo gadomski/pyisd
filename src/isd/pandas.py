@@ -1,4 +1,4 @@
-from typing import Iterable, cast
+from typing import Iterable
 
 import geopandas
 from geopandas import GeoDataFrame
@@ -153,7 +153,7 @@ def data_frame(records: Iterable[Record]) -> DataFrame:
             "original_observation_data": "string",
         }
     )
-    return cast(DataFrame, data_frame)
+    return data_frame
 
 
 def geo_data_frame(records: Iterable[Record]) -> GeoDataFrame:
