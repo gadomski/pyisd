@@ -21,13 +21,9 @@ jobs:
           pip install .
           pip install -r requirements-dev.txt
       - name: Lint
-        run: |
-          mypy src tests
-          black src tests
-          flake8 src tests
+        run: pre-commit run --all-files
       - name: Test
-        run: |
-          pytest
+        run: pytest
 
   publish:
     needs: build
