@@ -1,3 +1,5 @@
+# type: ignore
+
 import os.path
 from contextlib import contextmanager
 from io import TextIOWrapper
