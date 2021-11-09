@@ -25,6 +25,7 @@ The Python API allows reading compressed and uncompressed ISD files:
 
 ```python
 import isd
+
 with isd.open("isd-file") as records_iterator:
     records = list(records_iterator)
 ```
