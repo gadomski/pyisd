@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- [shed](https://pypi.org/project/shed/) via pre-commit
+- Timestamp field to the pandas data frame
+- `isd.pandas.read_to_data_frame`
+- Coordinate reference system to geopandas data frame points
+
+### Removed
+
+- `isd.open` is now only available as `isd.io.open`
+### Changed
+
+- Set default python version for pre-commit
+
+### Fixed
+
+- Documentation
+- Redundant casts
+
 ## [0.1.2] - 2020-09-30
 
 ### Added
