@@ -24,6 +24,8 @@ jobs:
         run: pre-commit run --all-files
       - name: Test
         run: pytest
+      - name: Examples
+        run: python examples/check_timesteps.py tests/data
 
   publish:
     needs: build
