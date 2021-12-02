@@ -3,7 +3,10 @@ import os.path
 from contextlib import contextmanager
 from typing import Generator, Iterable
 
-from isd.record import Record
+from pandas import DataFrame
+
+from . import pandas as isd_pandas
+from .record import Record
 
 builtin_open = open
 
@@ -24,3 +27,12 @@ def open(path: str) -> Generator[Iterable[Record], None, None]:
                 Record.parse(uncompressed_line)
                 for uncompressed_line in uncompressed_file
             )
+
+
+def read_to_data_frame(path: str) -> DataFrame:
+    """Reads a local ISD file into a DataFrame.
+
+    Optionally sets a timestamp index on the data frame.
+    """
+    with open(path) as file:
+        return isd_pandas.data_frame(file)
