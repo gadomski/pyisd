@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Timestamp field to the pandas data frame
 - `isd.pandas.read_to_data_frame`
 - Coordinate reference system to geopandas data frame points
+- Example that demonstrates checking that timestamps increase monotonically for a directory of ISD files
 
 ### Removed
 
