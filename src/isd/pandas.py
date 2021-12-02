@@ -1,6 +1,7 @@
 from typing import Iterable
 
 import geopandas
+import pandas
 from geopandas import GeoDataFrame
 from pandas import CategoricalDtype, DataFrame
 
@@ -153,6 +154,10 @@ def data_frame(records: Iterable[Record]) -> DataFrame:
             "original_observation_data": "string",
         }
     )
+    timestamp = pandas.to_datetime(
+        data_frame[["year", "month", "day", "hour", "minute"]]
+    )
+    data_frame["timestamp"] = timestamp
     return data_frame
 
 
