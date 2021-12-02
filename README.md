@@ -24,9 +24,9 @@ $ isd record 720538-00164-2021
 The Python API allows reading compressed and uncompressed ISD files:
 
 ```python
-import isd
+import isd.io
 
-with isd.open("isd-file") as records_iterator:
+with isd.io.open("isd-file") as records_iterator:
     records = list(records_iterator)
 ```
 
