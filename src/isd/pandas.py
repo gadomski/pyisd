@@ -171,6 +171,6 @@ def geo_data_frame(records: Iterable[Record]) -> GeoDataFrame:
     return GeoDataFrame(
         pandas_data_frame,
         geometry=geopandas.points_from_xy(
-            pandas_data_frame.longitude, pandas_data_frame.latitude
+            pandas_data_frame.longitude, pandas_data_frame.latitude, crs="EPSG:4326"
         ),
     )
