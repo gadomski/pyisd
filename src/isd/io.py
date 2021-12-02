@@ -30,9 +30,6 @@ def open(path: str) -> Generator[Iterable[Record], None, None]:
 
 
 def read_to_data_frame(path: str) -> DataFrame:
-    """Reads a local ISD file into a DataFrame.
-
-    Optionally sets a timestamp index on the data frame.
-    """
+    """Reads a local ISD file into a DataFrame."""
     with open(path) as file:
         return isd_pandas.data_frame(file)
