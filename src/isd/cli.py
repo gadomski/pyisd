@@ -3,11 +3,13 @@
 import dataclasses
 import itertools
 import json
+from typing import List
 
 import click
 from click import ClickException
 
 import isd.io
+import isd.parquet
 
 
 @click.group()
@@ -26,3 +28,11 @@ def record(infile: str, index: int) -> None:
             print(json.dumps(dataclasses.asdict(record), indent=4))
         else:
             raise ClickException(f"No record with index {index}")
+
+
+@main.command()
+@click.argument("INFILES", nargs=-1)
+@click.argument("DIRECTORY")
+def to_parquet(infiles: List[str], directory: str) -> None:
+    """Writes one or more ISD files to a parquet table."""
+    isd.parquet.write(infiles, directory)

@@ -9,7 +9,9 @@ import pytest
 
 from isd import Record
 
+BARDUFOSS_FILE_NAME = "010230-99999-2021"
 VANCE_BRAND_FILE_NAME = "720538-00164-2021"
+VANCE_BRAND_HALF_FILE_NAME = "720538-00164-2021-half"
 VANCE_BRAND_COMPRESSED_FILE_NAME = "720538-00164-2020.gz"
 
 
@@ -41,6 +43,19 @@ def compressed_path() -> str:
 
 
 @pytest.fixture
+def half_path() -> str:
+    return data_file_path(VANCE_BRAND_HALF_FILE_NAME)
+
+
+@pytest.fixture
 def records() -> List[Record]:
     with open_data_file(VANCE_BRAND_FILE_NAME) as f:
         return [Record.parse(line) for line in f]
+
+
+@pytest.fixture
+def paths() -> List[str]:
+    return [
+        data_file_path(VANCE_BRAND_FILE_NAME),
+        data_file_path(BARDUFOSS_FILE_NAME),
+    ]
