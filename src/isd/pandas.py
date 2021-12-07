@@ -1,4 +1,5 @@
-from typing import Iterable
+import datetime
+from typing import Iterable, Optional
 
 import geopandas
 import pandas
@@ -108,7 +109,9 @@ CavokCodeDtype = CategoricalDtype(["N", "Y"])
 VisibilityVariabilityCodeDtype = CategoricalDtype(["N", "V"])
 
 
-def data_frame(records: Iterable[Record]) -> DataFrame:
+def data_frame(
+    records: Iterable[Record], since: Optional[datetime.datetime] = None
+) -> DataFrame:
     """Constructs a pandas data frame from an iterable of Records.
 
     Uses appropriate datatypes and categorical variables.
@@ -158,7 +161,10 @@ def data_frame(records: Iterable[Record]) -> DataFrame:
         data_frame[["year", "month", "day", "hour", "minute"]]
     )
     data_frame["timestamp"] = timestamp
-    return data_frame
+    if since:
+        return data_frame[data_frame["timestamp"] > since]
+    else:
+        return data_frame
 
 
 def geo_data_frame(records: Iterable[Record]) -> GeoDataFrame:

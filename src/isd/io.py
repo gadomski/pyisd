@@ -1,7 +1,8 @@
+import datetime
 import gzip
 import os.path
 from contextlib import contextmanager
-from typing import Generator, Iterable
+from typing import Generator, Iterable, Optional
 
 from pandas import DataFrame
 
@@ -29,7 +30,9 @@ def open(path: str) -> Generator[Iterable[Record], None, None]:
             )
 
 
-def read_to_data_frame(path: str) -> DataFrame:
+def read_to_data_frame(
+    path: str, since: Optional[datetime.datetime] = None
+) -> DataFrame:
     """Reads a local ISD file into a DataFrame."""
     with open(path) as file:
-        return isd_pandas.data_frame(file)
+        return isd_pandas.data_frame(file, since=since)
