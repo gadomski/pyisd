@@ -47,3 +47,17 @@ To run the unit tests:
 ```shell
 $ pytest
 ```
+
+## Release
+
+To cut a new release of **pyisd** (assuming you have the appropriate permissions):
+
+1. Create a new branch, e.g. `release/v0.1.4`.
+2. Update the [CHANGELOG](CHANGELOG.md).
+3. Open a pull request with the changes.
+4. Merge the pull request once all required checks pass.
+5. Create an annotated tag.
+    - The tag **must** be named the same as the semver, e.g. `git tag -a v0.1.4`.
+      We use [setuptools-scm](https://github.com/pypa/setuptools_scm) to manage the package version so the tag name is very important.
+    - The tag's contents should probably be the same information that was in the CHANGELOG for this version.
+6. Push the annotated tag to github. This will trigger a new pypi release.
