@@ -3,10 +3,12 @@
 import dataclasses
 import itertools
 import json
-from typing import List
+import os
+from typing import List, Optional
 
 import click
 from click import ClickException
+from dask.distributed import Client
 
 import isd.io
 import isd.parquet
@@ -33,6 +35,18 @@ def record(infile: str, index: int) -> None:
 @main.command()
 @click.argument("INFILES", nargs=-1)
 @click.argument("DIRECTORY")
-def to_parquet(infiles: List[str], directory: str) -> None:
+@click.option("-c", "--client")
+def to_parquet(
+    infiles: List[str], directory: str, client: Optional[str] = None
+) -> None:
     """Writes one or more ISD files to a parquet table."""
-    isd.parquet.write(infiles, directory)
+    paths = []
+    for infile in infiles:
+        if os.path.isdir(infile):
+            for file_name in os.listdir(infile):
+                paths.append(os.path.abspath(os.path.join(infile, file_name)))
+        else:
+            paths.append(os.path.abspath(infile))
+    if client:
+        Client(client)
+    isd.parquet.write(paths, directory)
