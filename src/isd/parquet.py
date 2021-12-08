@@ -27,10 +27,10 @@ def write(
         ]
     else:
         data_frames = [dask.delayed(isd.io.read_to_data_frame)(path) for path in paths]
-    data_frame = (
-        dask.dataframe.from_delayed(data_frames)
-        .set_index("timestamp")
-        .repartition(freq=repartition_frequency)
+    data_frame = dask.dataframe.from_delayed(data_frames)
+    data_frame = data_frame.persist()
+    data_frame = data_frame.set_index("timestamp").repartition(
+        freq=repartition_frequency
     )
     data_frame.to_parquet(directory, append=append)
 
