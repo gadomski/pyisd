@@ -2,7 +2,7 @@ import datetime
 import gzip
 import os.path
 from contextlib import contextmanager
-from typing import Generator, Iterable, Optional
+from typing import Generator, Iterable, Iterator, Optional, TextIO
 
 from pandas import DataFrame
 
@@ -28,6 +28,16 @@ def open(path: str) -> Generator[Iterable[Record], None, None]:
                 Record.parse(uncompressed_line)
                 for uncompressed_line in uncompressed_file
             )
+
+
+def from_text_io(text_io: TextIO) -> Iterator[Record]:
+    """Reads records from a text io stream."""
+    while True:
+        line = text_io.readline()
+        if not line:
+            break
+        else:
+            yield Record.parse(line)
 
 
 def read_to_data_frame(
