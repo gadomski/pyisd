@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass
 from typing import Any, Callable, List, Optional, Tuple
 
@@ -134,6 +135,12 @@ class Record:
             remarks=remarks,
             element_quality_data=element_quality_data,
             original_observation_data=original_observation_data,
+        )
+
+    def datetime(self) -> datetime.datetime:
+        """Returns this record's datetime."""
+        return datetime.datetime(
+            self.year, self.month, self.day, self.hour, self.minute
         )
 
 
