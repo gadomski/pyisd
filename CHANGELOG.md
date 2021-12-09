@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2021-12-09
+
+### Added
+
+- Pip caching to CI
+
+### Changed
+
+- Downgrade dask requirement to ~=2021.08
+
+### Fixed
+
+- Add `dask[distributed]` to dependencies, as `distributed` is required by the cli
+- API documentation
+
 ## [0.1.3] - 2021-12-08
 
 ### Added
