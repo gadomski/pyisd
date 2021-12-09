@@ -6,8 +6,9 @@ Python package to work with NOAA's `Integrated Surface Database (ISD) <https://w
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :glob:
 
-   api
+   api/mod
    cli
 
 
