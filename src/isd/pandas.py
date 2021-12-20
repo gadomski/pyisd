@@ -1,9 +1,7 @@
 import datetime
 from typing import Iterable, Optional
 
-import geopandas
 import pandas
-from geopandas import GeoDataFrame
 from pandas import CategoricalDtype, DataFrame
 
 from isd import Record
@@ -165,18 +163,3 @@ def data_frame(
         return data_frame[data_frame["timestamp"] > since]
     else:
         return data_frame
-
-
-def geo_data_frame(records: Iterable[Record]) -> GeoDataFrame:
-    """Creates a GeoDataFrame from an iterable of Records.
-
-    Just like `data_frame`, but add the geometry attribute from the lat/lon of
-    the records.
-    """
-    pandas_data_frame = data_frame(records)
-    return GeoDataFrame(
-        pandas_data_frame,
-        geometry=geopandas.points_from_xy(
-            pandas_data_frame.longitude, pandas_data_frame.latitude, crs="EPSG:4326"
-        ),
-    )
