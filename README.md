@@ -1,9 +1,9 @@
 # pyisd
 
-[![Tests](https://github.com/gadomski/pyisd/actions/workflows/tests.yaml/badge.svg)](https://github.com/gadomski/pyisd/actions/workflows/tests.yaml)
-[![Lint](https://github.com/gadomski/pyisd/actions/workflows/lint.yaml/badge.svg)](https://github.com/gadomski/pyisd/actions/workflows/lint.yaml)
-![PyPI](https://img.shields.io/pypi/v/isd)
-[![Documentation](https://readthedocs.org/projects/isd/badge/?version=latest)](https://isd.readthedocs.io/en/latest/?badge=latest)
+[![Tests](https://img.shields.io/github/actions/workflow/status/gadomski/pyisd/tests.yml?style=for-the-badge&label=Tests)](https://github.com/gadomski/pyisd/actions/workflows/tests.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/gadomski/pyisd/lint.yml?style=for-the-badge&label=Lint)](https://github.com/gadomski/pyisd/actions/workflows/lint.yaml)
+[![PyPI - Version](https://img.shields.io/pypi/v/isd?style=for-the-badge)](https://pypi.org/project/isd/)
+[![Read the Docs (version)](https://img.shields.io/readthedocs/isd/stable?style=for-the-badge)](https://isd.readthedocs.io)
 
 Reads NOAA [Integrated Surface Database (ISD)](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) data.
 
