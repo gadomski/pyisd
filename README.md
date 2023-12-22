@@ -47,6 +47,25 @@ To run the unit tests:
 pytest
 ```
 
+To format the code:
+
+```shell
+ruff format
+```
+
+To lint the code:
+
+```shell
+ruff check
+```
+
+To check typing:
+
+```shell
+mypy src --ignore-missing-imports
+mypy tests --ignore-missing-imports
+```
+
 ## Release
 
 To cut a new release of **pyisd** (assuming you have the appropriate permissions):

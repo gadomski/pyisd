@@ -1,4 +1,4 @@
-name: Lint
+name: Typing
 
 on:
   push:
@@ -16,14 +16,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  lint:
+  typing:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           architecture: x64
@@ -34,5 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install '.[dev]'
 
-      - name: Lint
-        run: ruff check
+      - name: Typing
+        run: |
+          mypy src --ignore-missing-imports
+          mypy tests --ignore-missing-imports
