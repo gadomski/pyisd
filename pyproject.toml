@@ -1,11 +1,29 @@
-[build-system]
-requires = [
-    "setuptools>=45",
-    "wheel",
-    "setuptools_scm>=6.2"
+[project]
+name = "isd"
+version = "0.2.0"
+description = "Reads and archives NOAA Integrated Surface Database (ISD) files"
+readme = "README.md"
+authors = [{ name = "Pete Gadomski", email = "pete.gadomski@gmail.com" }]
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
 ]
+requires-python = ">=3.9"
+dependencies = ["click~=8.0", "pandas~=1.3"]
+
+[project.scripts]
+isd = "isd.cli:main"
+
+[project.optional-dependencies]
+dev = ["mypy~=1.2", "pre-commit~=3.2", "pytest~=7.4", "ruff~=0.1.9"]
+examples = ["tqdm~=4.66"]
+docs = ["sphinx~=7.2"]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools_scm]
-write_to = "src/isd/_version.py"
-local_scheme = "no-local-version"
+[tool.mypy]
+strict = true
