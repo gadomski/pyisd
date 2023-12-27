@@ -58,4 +58,5 @@ To cut a new release of **pyisd** (assuming you have the appropriate permissions
 5. Merge the pull request once all required checks pass.
 6. Create an annotated tag, e.g. `git tag -a v0.1.4`.
 7. Push the annotated tag to github.
-   This will trigger a new pypi release.
+8. Create a Github release.
+   This will trigger a new PyPI release.
