@@ -52,9 +52,10 @@ pytest
 To cut a new release of **pyisd** (assuming you have the appropriate permissions):
 
 1. Create a new branch, e.g. `release/v0.1.4`.
-2. Update the [CHANGELOG](CHANGELOG.md) and [pyproject.toml](./pyproject.toml).
-3. Open a pull request with the changes.
-4. Merge the pull request once all required checks pass.
-5. Create an annotated tag, e.g. `git tag -a v0.1.4`.
-6. Push the annotated tag to github.
+2. Update pre-commit hooks: `pre-commit autoupdate`
+3. Update the [CHANGELOG](CHANGELOG.md) and [pyproject.toml](./pyproject.toml).
+4. Open a pull request with the changes.
+5. Merge the pull request once all required checks pass.
+6. Create an annotated tag, e.g. `git tag -a v0.1.4`.
+7. Push the annotated tag to github.
    This will trigger a new pypi release.
