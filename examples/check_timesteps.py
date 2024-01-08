@@ -5,17 +5,17 @@ import sys
 
 import tqdm
 
-import isd.io
+from isd import Batch
 
 directory = sys.argv[1]
 paths = [os.path.join(directory, file_name) for file_name in os.listdir(directory)]
 all_monotonic = True
 bad_paths = []
 for path in tqdm.tqdm(paths):
-    data_frame = isd.io.read_to_data_frame(path)
-    min = data_frame.timestamp.min()
-    max = data_frame.timestamp.max()
-    is_monotonic = data_frame.timestamp.is_monotonic
+    data_frame = Batch.from_path(path).to_data_frame()
+    min = data_frame.datetime.min()
+    max = data_frame.datetime.max()
+    is_monotonic = data_frame.datetime.is_monotonic
     if not is_monotonic:
         all_monotonic = False
         bad_paths.append(path)

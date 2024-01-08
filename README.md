@@ -19,10 +19,20 @@ There is a simple command line interface.
 The `isd record` command prints a single record in JSON format:
 
 ```shell
-isd record 720538-00164-2021
+isd record tests/data/720538-00164-2021
 ```
 
 The Python API allows reading compressed and uncompressed ISD files:
+
+```python
+from isd import Batch
+
+batch = Batch.from_path("isd-file")
+for record in batch:
+    print(record)
+```
+
+Streaming is also supported:
 
 ```python
 import isd.io

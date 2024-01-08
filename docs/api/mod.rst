@@ -9,8 +9,8 @@ Most useful functions and classes are contained in submodules.
 
    errors
    io
-   pandas
    record
+   batch
 
 isd
 ---
