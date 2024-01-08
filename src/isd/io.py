@@ -1,12 +1,9 @@
-import datetime
 import gzip
 import os.path
 from contextlib import contextmanager
-from typing import Generator, Iterable, Iterator, Optional, TextIO
+from typing import Generator, Iterable
 
-from pandas import DataFrame
 
-from . import pandas as isd_pandas
 from .record import Record
 
 builtin_open = open
@@ -28,21 +25,3 @@ def open(path: str) -> Generator[Iterable[Record], None, None]:
                 Record.parse(uncompressed_line)
                 for uncompressed_line in uncompressed_file
             )
-
-
-def from_text_io(text_io: TextIO) -> Iterator[Record]:
-    """Reads records from a text io stream."""
-    while True:
-        line = text_io.readline()
-        if not line:
-            break
-        else:
-            yield Record.parse(line)
-
-
-def read_to_data_frame(
-    path: str, since: Optional[datetime.datetime] = None
-) -> DataFrame:
-    """Reads a local ISD file into a DataFrame."""
-    with open(path) as file:
-        return isd_pandas.data_frame(file, since=since)
