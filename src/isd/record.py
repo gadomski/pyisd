@@ -1,6 +1,7 @@
 import datetime
+import json
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple, Dict
 
 from isd.errors import IsdError
 
@@ -64,37 +65,41 @@ class Record:
         minute = int(line[25:27])
         data_source = line[27]
         # TODO test missing latitudes and longitudes
-        latitude = optional(line[28:34], "+99999", lambda s: float(s) / 1000)
-        longitude = optional(line[34:41], "+999999", lambda s: float(s) / 1000)
-        report_type = optional(line[41:46], "99999")
-        elevation = optional(line[46:51], "+9999", lambda s: float(s))
-        call_letters = optional(line[51:56], "99999")
+        latitude = cls._optional(line[28:34], "+99999", lambda s: float(s) / 1000)
+        longitude = cls._optional(line[34:41], "+999999", lambda s: float(s) / 1000)
+        report_type = cls._optional(line[41:46], "99999")
+        elevation = cls._optional(line[46:51], "+9999", lambda s: float(s))
+        call_letters = cls._optional(line[51:56], "99999")
         quality_control_process = line[56:60]
-        wind_direction = optional(line[60:63], "999", lambda s: int(s))
+        wind_direction = cls._optional(line[60:63], "999", lambda s: int(s))
         wind_direction_quality_code = line[63]
-        wind_observation_type = optional(line[64], "9")
-        wind_speed = optional(line[65:69], "9999", lambda s: float(s) / 10)
+        wind_observation_type = cls._optional(line[64], "9")
+        wind_speed = cls._optional(line[65:69], "9999", lambda s: float(s) / 10)
         wind_speed_quality_code = line[69]
-        ceiling = optional(line[70:75], "99999", lambda s: int(s))
+        ceiling = cls._optional(line[70:75], "99999", lambda s: int(s))
         ceiling_quality_code = line[75]
-        ceiling_determination_code = optional(line[76], "9")
-        cavok_code = optional(line[77], "9")
-        visibility = optional(line[78:84], "999999", lambda s: int(s))
+        ceiling_determination_code = cls._optional(line[76], "9")
+        cavok_code = cls._optional(line[77], "9")
+        visibility = cls._optional(line[78:84], "999999", lambda s: int(s))
         visibility_quality_code = line[84]
-        visibility_variability_code = optional(line[85], "9")
+        visibility_variability_code = cls._optional(line[85], "9")
         visibility_variability_quality_code = line[86]
-        air_temperature = optional(line[87:92], "+9999", lambda s: float(s) / 10)
+        air_temperature = cls._optional(line[87:92], "+9999", lambda s: float(s) / 10)
         air_temperature_quality_code = line[92]
-        dew_point_temperature = optional(line[93:98], "+9999", lambda s: float(s) / 10)
+        dew_point_temperature = cls._optional(
+            line[93:98], "+9999", lambda s: float(s) / 10
+        )
         dew_point_temperature_quality_code = line[98]
-        sea_level_pressure = optional(line[99:104], "99999", lambda s: float(s) / 10)
+        sea_level_pressure = cls._optional(
+            line[99:104], "99999", lambda s: float(s) / 10
+        )
         sea_level_pressure_quality_code = line[104]
-        additional_data, remainder = extract_data(
+        additional_data, remainder = cls._extract_data(
             line[105:], "ADD", ["REM", "EQD", "QNN"]
         )
-        remarks, remainder = extract_data(remainder, "REM", ["EQD", "QNN"])
-        element_quality_data, remainder = extract_data(remainder, "EQD", ["QNN"])
-        original_observation_data, remainder = extract_data(remainder, "QNN", [])
+        remarks, remainder = cls._extract_data(remainder, "REM", ["EQD", "QNN"])
+        element_quality_data, remainder = cls._extract_data(remainder, "EQD", ["QNN"])
+        original_observation_data, remainder = cls._extract_data(remainder, "QNN", [])
         assert not remainder
 
         return cls(
@@ -143,32 +148,80 @@ class Record:
             self.year, self.month, self.day, self.hour, self.minute
         )
 
-
-def extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
-    if message.startswith(tag):
-        index = None
-        for other_tag in later_tags:
-            try:
-                index = message.find(other_tag)
-            except ValueError:
-                continue
-            break
-        if index != -1:
-            data = message[len(tag) : index]
-            tail = message[index:]
-            return data, tail
+    @staticmethod
+    def _extract_data(message: str, tag: str, later_tags: List[str]) -> Tuple[str, str]:
+        if message.startswith(tag):
+            index = None
+            for other_tag in later_tags:
+                try:
+                    index = message.find(other_tag)
+                except ValueError:
+                    continue
+                break
+            if index != -1:
+                data = message[len(tag) : index]
+                tail = message[index:]
+                return data, tail
+            else:
+                return message[len(tag) :], ""
         else:
-            return message[len(tag) :], ""
-    else:
-        return "", message
+            return "", message
 
+    @staticmethod
+    def _optional(
+        string: str,
+        missing_value: str,
+        transform: Optional[Callable[[str], Any]] = None,
+    ) -> Any:
+        if string == missing_value:
+            return None
+        elif transform:
+            return transform(string)
+        else:
+            return string
 
-def optional(
-    string: str, missing_value: str, transform: Optional[Callable[[str], Any]] = None
-) -> Any:
-    if string == missing_value:
-        return None
-    elif transform:
-        return transform(string)
-    else:
-        return string
+    def to_dict(self) -> Dict[str, Any]:
+        """Returns a dictionary representation of this record."""
+        return {
+            "usaf_id": self.usaf_id,
+            "ncei_id": self.ncei_id,
+            # use datetime instead of year, month, day, hour, minute
+            "datetime": self.datetime(),
+            "data_source": self.data_source,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "report_type": self.report_type,
+            "elevation": self.elevation,
+            "call_letters": self.call_letters,
+            "quality_control_process": self.quality_control_process,
+            "wind_direction": self.wind_direction,
+            "wind_direction_quality_code": self.wind_direction_quality_code,
+            "wind_observation_type": self.wind_observation_type,
+            "wind_speed": self.wind_speed,
+            "wind_speed_quality_code": self.wind_speed_quality_code,
+            "ceiling": self.ceiling,
+            "ceiling_quality_code": self.ceiling_quality_code,
+            "ceiling_determination_code": self.ceiling_determination_code,
+            "cavok_code": self.cavok_code,
+            "visibility": self.visibility,
+            "visibility_quality_code": self.visibility_quality_code,
+            "visibility_variability_code": self.visibility_variability_code,
+            "visibility_variability_quality_code": self.visibility_variability_quality_code,
+            "air_temperature": self.air_temperature,
+            "air_temperature_quality_code": self.air_temperature_quality_code,
+            "dew_point_temperature": self.dew_point_temperature,
+            "dew_point_temperature_quality_code": self.dew_point_temperature_quality_code,
+            "sea_level_pressure": self.sea_level_pressure,
+            "sea_level_pressure_quality_code": self.sea_level_pressure_quality_code,
+            "additional_data": self.additional_data,
+            "remarks": self.remarks,
+            "element_quality_data": self.element_quality_data,
+            "original_observation_data": self.original_observation_data,
+        }
+
+    def to_json(self, indent: int = 4) -> str:
+        """Returns a JSON representation of this record."""
+        data = self.to_dict()
+        # use isoformat instead of datetime
+        data["datetime"] = data["datetime"].isoformat()
+        return json.dumps(data, indent=indent)

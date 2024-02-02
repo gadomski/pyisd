@@ -1,3 +1,6 @@
+import datetime
+import json
+
 import pytest
 
 from isd import IsdError, Record
@@ -52,3 +55,51 @@ def test_parse(record_line: str) -> None:
 def test_line_too_short() -> None:
     with pytest.raises(IsdError):
         Record.parse("")
+
+
+def test_record_to_dict(record: Record) -> None:
+    assert record.to_dict() == {
+        "usaf_id": "720538",
+        "ncei_id": "00164",
+        "datetime": datetime.datetime(2021, 1, 1, 0, 15),
+        "data_source": "4",
+        "latitude": 40.167,
+        "longitude": -105.167,
+        "report_type": "FM-15",
+        "elevation": 1541,
+        "call_letters": None,
+        "quality_control_process": "V020",
+        "wind_direction": None,
+        "wind_direction_quality_code": "9",
+        "wind_observation_type": "C",
+        "wind_speed": 0,
+        "wind_speed_quality_code": "1",
+        "ceiling": 3353,
+        "ceiling_quality_code": "1",
+        "ceiling_determination_code": None,
+        "cavok_code": "N",
+        "visibility": 16093,
+        "visibility_quality_code": "1",
+        "visibility_variability_code": None,
+        "visibility_variability_quality_code": "9",
+        "air_temperature": 3.1,
+        "air_temperature_quality_code": "1",
+        "dew_point_temperature": -5.8,
+        "dew_point_temperature_quality_code": "1",
+        "sea_level_pressure": None,
+        "sea_level_pressure_quality_code": "9",
+        "additional_data": "GD14991+0335399GE19MSL   +99999+"
+        "99999GF199999999999033531999999MA1101561999999",
+        "remarks": "MET075METAR KLMO 010015Z AUTO 00000KT "
+        "10SM OVC110 03/M06 A2999 RMK AO2 T00311058=",
+        "element_quality_data": "",
+        "original_observation_data": "",
+    }
+
+
+def test_record_to_json(record: Record) -> None:
+    json_string = record.to_json()
+    data = json.loads(json_string)
+    assert data["usaf_id"] == "720538"
+    assert data["ncei_id"] == "00164"
+    assert data["datetime"] == "2021-01-01T00:15:00"

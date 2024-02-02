@@ -7,7 +7,7 @@ from typing import Generator, List, cast
 
 import pytest
 
-from isd import Record
+from isd import Record, Batch
 
 BARDUFOSS_FILE_NAME = "010230-99999-2021"
 VANCE_BRAND_FILE_NAME = "720538-00164-2021"
@@ -33,8 +33,18 @@ def record_line() -> str:
 
 
 @pytest.fixture
+def record(record_line: str) -> Record:
+    return Record.parse(record_line)
+
+
+@pytest.fixture
 def uncompressed_path() -> str:
     return data_file_path(VANCE_BRAND_FILE_NAME)
+
+
+@pytest.fixture
+def batch(uncompressed_path: str) -> Batch:
+    return Batch.from_path(uncompressed_path)
 
 
 @pytest.fixture
