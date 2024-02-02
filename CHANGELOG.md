@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.0] - 2024-02-02
+
 ### Added
 
 - Restructure library into record and batch ([#36](https://github.com/gadomski/pyisd/pull/36))
@@ -99,6 +101,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Initial release.
 
+[Unreleased]: <https://github.com/gadomski/pyisd/compare/v0.3.0..main>
+[0.3.0]: <https://github.com/gadomski/pyisd/compare/v0.2.1..v0.3.0>
 [0.2.1]: <https://github.com/gadomski/pyisd/compare/v0.2.0..v0.2.1>
 [0.2.0]: <https://github.com/gadomski/pyisd/compare/v0.1.5..v0.2.0>
 [0.1.5]: <https://github.com/gadomski/pyisd/compare/v0.1.4..v0.1.5>
