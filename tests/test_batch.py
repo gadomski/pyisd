@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import pytest
 from isd import Batch
 
 
@@ -62,7 +63,18 @@ def test_batch_to_json(batch: Batch) -> None:
 
 
 def test_batch_to_df(batch: Batch) -> None:
+    pytest.importorskip("pandas")
+
     datetime_min = datetime.datetime(2021, 1, 5)
     df = batch.to_data_frame()
     df = df[df["datetime"] >= datetime_min]
+    assert len(df) == 212
+
+
+def test_batch_to_polars(batch: Batch) -> None:
+    polars = pytest.importorskip("polars")
+
+    datetime_min = datetime.datetime(2021, 1, 5)
+    df = batch.to_polars()
+    df = df.filter(polars.col("datetime") >= datetime_min)
     assert len(df) == 212

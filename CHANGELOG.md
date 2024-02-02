@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add support for polars ([#44](https://github.com/gadomski/pyisd/pull/44))
+- Make pandas optional ([#43](https://github.com/gadomski/pyisd/pull/43))
+
 ## [0.3.0] - 2024-02-02
 
 ### Added
