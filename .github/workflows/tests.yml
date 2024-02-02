@@ -44,8 +44,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install '.[dev,examples]'
 
-      - name: Test
+      - name: Test all except pandas
         run: pytest
+
+      - name: Install pandas
+        run: pip install '.[pandas]'
+
+      - name: Test only pandas
+        run: pytest -m pandas
 
       - name: Examples
         run: python examples/check_timesteps.py tests/data
