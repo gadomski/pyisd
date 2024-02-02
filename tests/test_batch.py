@@ -1,6 +1,8 @@
 import datetime
 import json
 
+import pytest
+
 from isd import Batch
 
 
@@ -61,7 +63,10 @@ def test_batch_to_json(batch: Batch) -> None:
     assert first["datetime"] == "2021-01-01T00:15:00"
 
 
+@pytest.mark.pandas  # type: ignore
 def test_batch_to_df(batch: Batch) -> None:
+    pytest.importorskip("pandas")
+
     datetime_min = datetime.datetime(2021, 1, 5)
     df = batch.to_data_frame()
     df = df[df["datetime"] >= datetime_min]
