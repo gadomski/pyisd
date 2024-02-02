@@ -4,12 +4,15 @@ import json
 from io import BytesIO
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Union, Optional, Dict, Any, Iterator
+from typing import List, Union, Optional, Dict, Any, Iterator, TYPE_CHECKING
 import datetime
 
 from isd.record import Record
 
 import pandas
+
+if TYPE_CHECKING:
+    import polars
 
 
 @dataclass
@@ -84,3 +87,16 @@ class Batch:
     def to_data_frame(self) -> pandas.DataFrame:
         """Reads a local ISD file into a DataFrame."""
         return pandas.DataFrame([record.to_dict() for record in self.records])
+
+    def to_polars(self) -> polars.DataFrame:
+        """Reads a local ISD file into a Polars DataFrame."""
+        try:
+            import polars
+        except ImportError as e:
+            message = (
+                "The `polars` optional dependency is required to use `to_polars`. "
+                "Install this dependency with `pip install 'isd[polars]'`"
+            )
+            raise ImportError(message) from e
+
+        return polars.DataFrame([record.to_dict() for record in self.records])

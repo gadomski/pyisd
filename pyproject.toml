@@ -20,6 +20,12 @@ isd = "isd.cli:main"
 dev = ["mypy~=1.2", "pre-commit~=3.2", "pytest~=8.0", "ruff~=0.2.0"]
 examples = ["tqdm~=4.66"]
 docs = ["sphinx~=7.2"]
+polars = ["polars>=0.20.6"]
+
+[tool.pytest.ini_options]
+markers = [
+    "polars: marks tests that require polars",
+]
 
 [build-system]
 requires = ["setuptools>=45", "wheel"]
