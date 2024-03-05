@@ -2,7 +2,6 @@ import datetime
 import json
 
 import pytest
-
 from isd import Batch
 
 
@@ -63,7 +62,6 @@ def test_batch_to_json(batch: Batch) -> None:
     assert first["datetime"] == "2021-01-01T00:15:00"
 
 
-@pytest.mark.pandas  # type: ignore
 def test_batch_to_df(batch: Batch) -> None:
     pytest.importorskip("pandas")
 
