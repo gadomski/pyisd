@@ -15,11 +15,13 @@ for path in tqdm.tqdm(paths):
     data_frame = Batch.from_path(path).to_data_frame()
     min = data_frame.datetime.min()
     max = data_frame.datetime.max()
-    is_monotonic = data_frame.datetime.is_monotonic
-    if not is_monotonic:
+    is_monotonic_increasing = data_frame.datetime.is_monotonic_increasing
+    if not is_monotonic_increasing:
         all_monotonic = False
         bad_paths.append(path)
-    tqdm.tqdm.write(f"{path}: min={min}, max={max}, is_monotonic={is_monotonic}")
+    tqdm.tqdm.write(
+        f"{path}: min={min}, max={max}, is_monotonic_increasing={is_monotonic_increasing}"
+    )
 
 if all_monotonic:
     print("All files have monotonically increasing timestamps!")
