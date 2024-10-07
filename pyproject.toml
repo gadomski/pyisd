@@ -17,7 +17,7 @@ dependencies = ["click~=8.0"]
 isd = "isd.cli:main"
 
 [project.optional-dependencies]
-dev = ["mypy~=1.2", "pre-commit~=3.2", "pytest~=8.0", "ruff~=0.6.1"]
+dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.6.1"]
 examples = ["tqdm~=4.66"]
 docs = ["sphinx~=8.0"]
 polars = ["polars~=1.9.0"]
