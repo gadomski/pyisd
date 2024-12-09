@@ -20,7 +20,7 @@ isd = "isd.cli:main"
 dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.8.0"]
 examples = ["tqdm~=4.66"]
 docs = ["sphinx~=8.0"]
-polars = ["polars~=1.16.0"]
+polars = ["polars~=1.17.0"]
 pandas = ["pandas~=2.0"]
 
 [build-system]
