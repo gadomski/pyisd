@@ -17,15 +17,17 @@ dependencies = ["click~=8.0"]
 isd = "isd.cli:main"
 
 [project.optional-dependencies]
-dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.14.0"]
-examples = ["tqdm~=4.66"]
-docs = ["sphinx~=7.4"]
 polars = ["polars~=1.35.0"]
 pandas = ["pandas~=2.0"]
 
+[dependency-groups]
+dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.14.0"]
+examples = ["tqdm~=4.66"]
+docs = ["sphinx~=7.4"]
+
 [build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.mypy]
 strict = true
