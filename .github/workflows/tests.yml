@@ -21,21 +21,14 @@ jobs:
             python-version: "3.9"
     steps:
       - uses: actions/checkout@v6
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - uses: astral-sh/setup-uv@v4
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-          cache: pip
-      - name: Install project
-        run: |
-          python -m pip install --upgrade pip
-          pip install '.[dev,examples]'
+      - name: Lint
+        run: uv run pre-commit run --all-files
       - name: Test
-        run: pytest
-      - name: Install polars and pandas
-        run: pip install '.[polars,pandas]'
-      - name: Test
-        run: pytest
+        run: uv run pytest
+      - name: Test with polars and pandas
+        run: uv run --extra polars --extra pandas pytest
       - name: Run examples
-        run: python examples/check_timesteps.py tests/data
+        run: uv run --group examples python examples/check_timesteps.py tests/data

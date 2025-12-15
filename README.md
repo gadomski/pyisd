@@ -10,7 +10,7 @@ Reads NOAA [Integrated Surface Database (ISD)](https://www.ncei.noaa.gov/product
 ## Installation
 
 ```shell
-pip install isd
+python -m pip install isd
 ```
 
 ## Usage
@@ -45,16 +45,22 @@ There is currently no parsing of the `additional_data` section, but all mandator
 
 ## Development
 
-Install the development requirements and the package in editable mode:
+This project uses [uv](https://docs.astral.sh/uv/) for development. Install uv first:
 
 ```shell
-pip install -e '.[dev]'
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install the development dependencies:
+
+```shell
+uv sync
 ```
 
 To run the unit tests:
 
 ```shell
-pytest
+uv run pytest
 ```
 
 ## Release
