@@ -21,7 +21,7 @@ polars = ["polars~=1.36.1"]
 pandas = ["pandas~=2.0"]
 
 [dependency-groups]
-dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.14.0"]
+dev = ["mypy~=1.2", "pre-commit~=4.0", "pytest~=8.0", "ruff~=0.15.0"]
 examples = ["tqdm~=4.66"]
 docs = ["sphinx~=7.4"]
 
